@@ -22,6 +22,12 @@ document.addEventListener("DOMContentLoaded", function() {
     squares.forEach(square => {
         // Adds the class 'square' to each div element
         square.classList.add("square");
+        square.addEventListener("mouseover", function() {
+            square.classList.add("hover");
+        });
+        square.addEventListener("mouseout", function() {
+            square.classList.remove("hover");
+        });
         square.addEventListener("click", handleClick);
     });
 });
