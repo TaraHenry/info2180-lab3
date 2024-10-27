@@ -1,14 +1,28 @@
+// Implement these instructions once the page is loaded
 document.addEventListener("DOMContentLoaded", function() {
-    const squares = document.querySelectorAll("#board > div");
-    const statusDiv = document.getElementById("status");
+    const squares = document.querySelectorAll("#board > div"); // targets all div elements on the css board element
+    const statusDiv = document.getElementById("status"); // gets the div element that has the ID "status"
     const newGame = document.querySelector(".btn");
-    const gameState = Array(9).fill(null);
-    let currentPlayer = 'X';
-    // Attach event listener to the New Game button
-    newGame.addEventListener("click", reset);
+    const gameState = Array(9).fill(null); // initializes the game state as null values for all 9 squares/indexes.
+    let currentPlayer = 'X'; //the first player is an X
+    newGame.addEventListener("click", reset); // Attach event listener to the New Game button
 
-    const handleClick = (e) => {
-        const square = e.target;
+    squares.forEach(square => {
+        // Adds the class 'square' to each div element
+        square.classList.add("square");
+        // Mouse hover functionality
+        square.addEventListener("mouseover", function() {
+            square.classList.add("hover");
+        });
+        square.addEventListener("mouseout", function() {
+            square.classList.remove("hover");
+        });
+        // Mouse click functionality
+        square.addEventListener("click", handleClick);
+    });
+
+    function handleClick(e) {
+        const square = e.target; // functions only when the square is clicked
         const index = Array.from(squares).indexOf(square);
     
         // Checks if the square is already filled
@@ -35,11 +49,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function checkWinner(player) {
         const winPatterns = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Horizontal
-            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Vertical
-            [0, 4, 8], [2, 4, 6]             // Diagonal
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Horizontal (first row, second row, third row)
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Vertical (first column, second column, third column)
+            [0, 4, 8], [2, 4, 6]             // Diagonal (leading diagonal, anti-diagonal)
         ];
-    
+        // Check that all the indexes in the pattern are equal to the same player ('X' or 'O')
+        // e.g. gameState[0] === 'X', gameState[1] === 'X' and gameState[2] === 'X' will return true
         for (const pattern of winPatterns) {
             if (pattern.every(index => gameState[index] === player)) {
                 return true;
@@ -66,17 +81,5 @@ document.addEventListener("DOMContentLoaded", function() {
         // Reset current player
         currentPlayer = 'X';
     }
-
-    squares.forEach(square => {
-        // Adds the class 'square' to each div element
-        square.classList.add("square");
-        square.addEventListener("mouseover", function() {
-            square.classList.add("hover");
-        });
-        square.addEventListener("mouseout", function() {
-            square.classList.remove("hover");
-        });
-        square.addEventListener("click", handleClick);
-    });
 });
 
