@@ -1,9 +1,12 @@
 document.addEventListener("DOMContentLoaded", function() {
     const squares = document.querySelectorAll("#board > div");
     const statusDiv = document.getElementById("status");
-    let currentPlayer = 'X';
+    const newGame = document.querySelector(".btn");
     const gameState = Array(9).fill(null);
-    
+    let currentPlayer = 'X';
+    // Attach event listener to the New Game button
+    newGame.addEventListener("click", reset);
+
     const handleClick = (e) => {
         const square = e.target;
         const index = Array.from(squares).indexOf(square);
@@ -29,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Switch to the next player
         currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
     }
+
     function checkWinner(player) {
         const winPatterns = [
             [0, 1, 2], [3, 4, 5], [6, 7, 8], // Horizontal
@@ -43,6 +47,26 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         return false;
     }    
+
+    function reset() {
+        // Clear the game state
+        gameState.fill(null);
+
+        // Reset each square
+        squares.forEach(square => {
+            square.textContent = '';
+            square.classList.remove('X', 'O');
+            square.addEventListener("click", handleClick);
+        });
+
+        // Reset status message
+        statusDiv.textContent = 'Move your mouse over a square and click to play an X or an O.';
+        statusDiv.classList.remove('you-won');
+
+        // Reset current player
+        currentPlayer = 'X';
+    }
+
     squares.forEach(square => {
         // Adds the class 'square' to each div element
         square.classList.add("square");
